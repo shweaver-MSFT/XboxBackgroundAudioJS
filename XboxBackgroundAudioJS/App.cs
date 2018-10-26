@@ -24,6 +24,9 @@ namespace XboxBackgroundAudioJS
 
         public App() : base(_appSource)
         {
+            // Enable XY focus navigation for Xbox
+            //RequiresPointerMode = ApplicationRequiresPointerMode.WhenRequested;
+
             // Subscribe to key lifecyle events to know when the app
             // transitions to and from foreground and background.
             // Leaving the background is an important transition

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -45,6 +45,7 @@
                     _mediaPlayer = new MediaPlayer();
                     _mediaPlayer.source = source;
                     _mediaPlayer.autoPlay = true;
+                    _mediaPlayer.isLoopingEnabled = true;
 
                     _systemMediaTransportControls = _mediaPlayer.systemMediaTransportControls;
                     _systemMediaTransportControls.isPlayEnabled = true;

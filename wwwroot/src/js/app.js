@@ -7,10 +7,21 @@
 
         // Initialize the TitleBar
         if (window.Windows) {
-            var titleBar = Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar;
-            titleBar.backgroundColor = this.TitleBarColor;
-            titleBar.buttonBackgroundColor = this.TitleBarColor;
-            titleBar.foregroundColor = this.TitleBarTextColor;
+            try {
+                var currentView = Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
+
+                if (currentView !== null) {
+                    var titleBar = currentView.titleBar;
+                    titleBar.backgroundColor = this.TitleBarColor;
+                    titleBar.buttonBackgroundColor = this.TitleBarColor;
+                    titleBar.foregroundColor = this.TitleBarTextColor;
+
+                    currentView.setDesiredBoundsMode(Windows.UI.ViewManagement.ApplicationViewBoundsMode.useCoreWindow);
+                }
+            }
+            catch(e) {
+                // Windows.UI.ViewManagement.ApplicationView.getForCurrentView() will fail on Xbox
+            }
         }
     };
 
