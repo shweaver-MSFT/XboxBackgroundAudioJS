@@ -92,6 +92,10 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="..\wwwroot\src\assets\Ring01.wma">
+      <Link>assets\Ring01.wma</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\wwwroot\src\css\global.css">
       <Link>css\global.css</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
