@@ -68,11 +68,13 @@ namespace WebView.Interop
                 {
                     _webView.NavigationStarting -= WebView_NavigationStarting;
                     _webView.DOMContentLoaded -= WebView_DOMContentLoaded;
+                    _webView.Unloaded += WebView_Unloaded;
                 }
 
                 _webView = new Windows.UI.Xaml.Controls.WebView();
                 _webView.NavigationStarting += WebView_NavigationStarting;
                 _webView.DOMContentLoaded += WebView_DOMContentLoaded;
+                _webView.Unloaded += WebView_Unloaded;
 
                 Window.Current.Content = _webView;
             }
@@ -95,8 +97,9 @@ namespace WebView.Interop
         public void Launch(Uri source, ContactPanelActivatedEventArgs e)
         {
             var webView = new Windows.UI.Xaml.Controls.WebView();
-            webView.NavigationStarting += WebView_NavigationStarting;
-            webView.DOMContentLoaded += WebView_DOMContentLoaded;
+            _webView.NavigationStarting += WebView_NavigationStarting;
+            _webView.DOMContentLoaded += WebView_DOMContentLoaded;
+            _webView.Unloaded += WebView_Unloaded;
 
             Window.Current.Content = webView;
             webView.Navigate(source);
@@ -230,6 +233,18 @@ namespace WebView.Interop
         private void WebView_DOMContentLoaded(Windows.UI.Xaml.Controls.WebView sender, WebViewDOMContentLoadedEventArgs args)
         {
             Activate(_launchArgs);
+        }
+
+        private void WebView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is Windows.UI.Xaml.Controls.WebView webView && webView != null)
+            {
+                webView.NavigationStarting -= WebView_NavigationStarting;
+                webView.DOMContentLoaded -= WebView_DOMContentLoaded;
+                webView.Unloaded -= WebView_Unloaded;
+            }
+
+            GC.Collect();
         }
         #endregion WebView event handlers
     }
