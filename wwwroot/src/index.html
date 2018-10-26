@@ -10,7 +10,8 @@
 </head>
 <body>
     <div class="contentRoot">
-        <audio id="MyAudio" src="assets/Ring01.wma" controls autoplay />
+        <button id="playButton">Play</button>
+        <button id="pauseButton">Pause</button>
     </div>
 
     <!-- Include scripts at the end, for perf. -->
@@ -25,13 +26,56 @@
             /* Main ViewModel */
             var viewModel = new function () {
 
+                let Uri = Windows.Foundation.Uri;
+                let MediaSource = Windows.Media.Core.MediaSource;
+                let MediaPlayer = Windows.Media.Playback.MediaPlayer;
+                let SystemMediaTransportControlsButton = Windows.Media.SystemMediaTransportControlsButton;
+
+                var _mediaPlayer = null;
+                var _systemMediaTransportControls = null;
+
                 /**
                  * Initialize the ViewModel.
                  */
                 this.InitializeAsync = async function () {
                     logger.Log("Main ViewModel Initializing...");
+
+                    let source = MediaSource.createFromUri(new Uri("ms-appx:///assets/Ring01.wma"));
+
+                    _mediaPlayer = new MediaPlayer();
+                    _mediaPlayer.source = source;
+                    _mediaPlayer.autoPlay = true;
+
+                    _systemMediaTransportControls = _mediaPlayer.systemMediaTransportControls;
+                    _systemMediaTransportControls.isPlayEnabled = true;
+                    _systemMediaTransportControls.isPauseEnabled = true;
+                    _systemMediaTransportControls.addEventListener("buttonpressed", SystemMediaTransportControls_ButtonPressed.bind(this));
+
+                    _mediaPlayer.play();
+
                     logger.Log("Main ViewModel Initialized");
                 };
+
+                this.Play = function () {
+                    _mediaPlayer.play();
+                };
+
+                this.Pause = function () {
+                    _mediaPlayer.pause();
+                };
+
+                function SystemMediaTransportControls_ButtonPressed(args) {
+                    var button = args.detail[0].button;
+
+                    switch (button) {
+                        case SystemMediaTransportControlsButton.play:
+                            this.Play();
+                            break;
+                        case SystemMediaTransportControlsButton.pause:
+                            this.Pause();
+                            break;
+                    }
+                }
             };
 
             /* Main View */
@@ -43,9 +87,18 @@
                 // Init ViewModel
                 viewModel.InitializeAsync();
 
+                var playButton = document.querySelector("#playButton");
+                playButton.addEventListener("click", function () {
+                    viewModel.Play();
+                });
+
+                var pauseButton = document.querySelector("#pauseButton");
+                pauseButton.addEventListener("click", function () {
+                    viewModel.Pause();
+                });
+
                 logger.Log("Main View Initialized");
             }();
-
         })();
     </script>
 </body>
