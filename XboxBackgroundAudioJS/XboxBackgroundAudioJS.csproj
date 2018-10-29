@@ -96,6 +96,10 @@
       <Link>assets\Ring01.wma</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\wwwroot\src\assets\background.jpg">
+      <Link>assets\background.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\wwwroot\src\css\global.css">
       <Link>css\global.css</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

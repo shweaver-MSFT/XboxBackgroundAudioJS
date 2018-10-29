@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -10,8 +10,12 @@
 </head>
 <body>
     <div class="contentRoot">
-        <button id="playButton">Play</button>
-        <button id="pauseButton">Pause</button>
+        <div class="content">
+            <h1>Xbox Background Audio JS</h1>
+            <br />
+            <button id="playButton">Play</button>
+            <button id="pauseButton">Pause</button>
+        </div>
     </div>
 
     <!-- Include scripts at the end, for perf. -->
@@ -26,11 +30,6 @@
             /* Main ViewModel */
             var viewModel = new function () {
 
-                let Uri = Windows.Foundation.Uri;
-                let MediaSource = Windows.Media.Core.MediaSource;
-                let MediaPlayer = Windows.Media.Playback.MediaPlayer;
-                let SystemMediaTransportControlsButton = Windows.Media.SystemMediaTransportControlsButton;
-
                 var _mediaPlayer = null;
                 var _systemMediaTransportControls = null;
 
@@ -40,32 +39,39 @@
                 this.InitializeAsync = async function () {
                     logger.Log("Main ViewModel Initializing...");
 
-                    let source = MediaSource.createFromUri(new Uri("ms-appx:///assets/Ring01.wma"));
+                    if (window.Windows) {
+                        let Uri = Windows.Foundation.Uri;
+                        let MediaSource = Windows.Media.Core.MediaSource;
+                        let MediaPlayer = Windows.Media.Playback.MediaPlayer;
+                        let source = MediaSource.createFromUri(new Uri("ms-appx:///assets/Ring01.wma"));
 
-                    _mediaPlayer = new MediaPlayer();
-                    _mediaPlayer.source = source;
-                    _mediaPlayer.autoPlay = true;
-                    _mediaPlayer.isLoopingEnabled = true;
+                        _mediaPlayer = new MediaPlayer();
+                        _mediaPlayer.source = source;
+                        _mediaPlayer.autoPlay = true;
+                        _mediaPlayer.isLoopingEnabled = true;
 
-                    _systemMediaTransportControls = _mediaPlayer.systemMediaTransportControls;
-                    _systemMediaTransportControls.isPlayEnabled = true;
-                    _systemMediaTransportControls.isPauseEnabled = true;
-                    _systemMediaTransportControls.addEventListener("buttonpressed", SystemMediaTransportControls_ButtonPressed.bind(this));
+                        _systemMediaTransportControls = _mediaPlayer.systemMediaTransportControls;
+                        _systemMediaTransportControls.isPlayEnabled = true;
+                        _systemMediaTransportControls.isPauseEnabled = true;
+                        _systemMediaTransportControls.addEventListener("buttonpressed", SystemMediaTransportControls_ButtonPressed.bind(this));
 
-                    _mediaPlayer.play();
-
+                        _mediaPlayer.play();
+                    }
                     logger.Log("Main ViewModel Initialized");
                 };
 
                 this.Play = function () {
-                    _mediaPlayer.play();
+                    if (_mediaPlayer) _mediaPlayer.play();
                 };
 
                 this.Pause = function () {
-                    _mediaPlayer.pause();
+                    if (_mediaPlayer) _mediaPlayer.pause();
                 };
 
                 function SystemMediaTransportControls_ButtonPressed(args) {
+                    if (!window.Windows) return;
+
+                    let SystemMediaTransportControlsButton = Windows.Media.SystemMediaTransportControlsButton;
                     var button = args.detail[0].button;
 
                     switch (button) {

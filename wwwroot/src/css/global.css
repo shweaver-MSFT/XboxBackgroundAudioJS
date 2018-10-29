@@ -9,4 +9,24 @@ body {
 
 .contentRoot {
     margin: 0;
+    position: absolute;
+    background: url("../assets/background.jpg") no-repeat right center;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.content {
+    border: 1px solid tan;
+    background: white;
+    padding: 12px;
+    margin-left: 15vw;
+    display: inline-block;
+    width: 30vw;
+    min-width: 300px;
+    height: 40vh;
+    text-align: center;
 }
