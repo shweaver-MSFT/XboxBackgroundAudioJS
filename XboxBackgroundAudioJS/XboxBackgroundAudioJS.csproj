@@ -100,6 +100,46 @@
       <Link>assets\background.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\wwwroot\src\assets\image0.jpg">
+      <Link>assets\image0.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\wwwroot\src\assets\image1.jpg">
+      <Link>assets\image1.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\wwwroot\src\assets\image2.jpg">
+      <Link>assets\image2.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\wwwroot\src\assets\image3.jpg">
+      <Link>assets\image3.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\wwwroot\src\assets\image4.jpg">
+      <Link>assets\image4.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\wwwroot\src\assets\image5.jpg">
+      <Link>assets\image5.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\wwwroot\src\assets\image6.jpg">
+      <Link>assets\image6.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\wwwroot\src\assets\image7.jpg">
+      <Link>assets\image7.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\wwwroot\src\assets\image8.jpg">
+      <Link>assets\image8.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\wwwroot\src\assets\image9.jpg">
+      <Link>assets\image9.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\wwwroot\src\css\global.css">
       <Link>css\global.css</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

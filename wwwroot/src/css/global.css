@@ -30,3 +30,15 @@ body {
     height: 40vh;
     text-align: center;
 }
+
+#bigImages {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: 100px;
+    display: flex;
+}
+
+#bigImages > img {
+    max-height: 100px;
+    display: inline-block;
+}

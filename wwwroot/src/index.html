@@ -15,6 +15,22 @@
             <br />
             <button id="playButton">Play</button>
             <button id="pauseButton">Pause</button>
+            <br />
+            <br />
+            <!--<span id="appMemoryUsage">0</span>
+            <span>units</span>-->
+            <div id="bigImages">
+                <img src="assets/image0.jpg" />
+                <img src="assets/image1.jpg" />
+                <img src="assets/image2.jpg" />
+                <img src="assets/image3.jpg" />
+                <img src="assets/image4.jpg" />
+                <img src="assets/image5.jpg" />
+                <img src="assets/image6.jpg" />
+                <img src="assets/image7.jpg" />
+                <img src="assets/image8.jpg" />
+                <img src="assets/image9.jpg" />
+            </div>
         </div>
     </div>
 
@@ -40,6 +56,7 @@
                     logger.Log("Main ViewModel Initializing...");
 
                     if (window.Windows) {
+                        // MediaPlayer
                         let Uri = Windows.Foundation.Uri;
                         let MediaSource = Windows.Media.Core.MediaSource;
                         let MediaPlayer = Windows.Media.Playback.MediaPlayer;
@@ -56,6 +73,12 @@
                         _systemMediaTransportControls.addEventListener("buttonpressed", SystemMediaTransportControls_ButtonPressed.bind(this));
 
                         _mediaPlayer.play();
+
+                        // MemoryManager
+                        //let MemoryManager = Windows.System.MemoryManager;
+                        //MemoryManager.addEventListener("onappmemoryusageincreased", MemoryManager_AppMemoryUsageChanged.bind(this));
+                        //MemoryManager.addEventListener("onappmemoryusagedecreased", MemoryManager_AppMemoryUsageChanged.bind(this));
+                        //MemoryManager_AppMemoryUsageChanged();
                     }
                     logger.Log("Main ViewModel Initialized");
                 };
@@ -67,6 +90,12 @@
                 this.Pause = function () {
                     if (_mediaPlayer) _mediaPlayer.pause();
                 };
+
+                //function MemoryManager_AppMemoryUsageChanged() {
+                //    if (!window.Windows) return;
+                //    let MemoryManager = Windows.System.MemoryManager;
+                //    UpdateAppMemoryUsage(MemoryManager.appMemoryUsage);
+                //}
 
                 function SystemMediaTransportControls_ButtonPressed(args) {
                     if (!window.Windows) return;
@@ -86,26 +115,29 @@
             };
 
             /* Main View */
-            var view = new function () {
+            // Init View
+            logger.Log("Main View Initializing...");
 
-                // Init View
-                logger.Log("Main View Initializing...");
+            //var appMemoryUsage = document.querySelector("#appMemoryUsage");
 
-                // Init ViewModel
-                viewModel.InitializeAsync();
+            //function UpdateAppMemoryUsage(memoryUsage) {
+            //    appMemoryUsage.innerHTML = memoryUsage / 1000;
+            //};
 
-                var playButton = document.querySelector("#playButton");
-                playButton.addEventListener("click", function () {
-                    viewModel.Play();
-                });
+            // Init ViewModel
+            viewModel.InitializeAsync();
 
-                var pauseButton = document.querySelector("#pauseButton");
-                pauseButton.addEventListener("click", function () {
-                    viewModel.Pause();
-                });
+            var playButton = document.querySelector("#playButton");
+            playButton.addEventListener("click", function () {
+                viewModel.Play();
+            });
 
-                logger.Log("Main View Initialized");
-            }();
+            var pauseButton = document.querySelector("#pauseButton");
+            pauseButton.addEventListener("click", function () {
+                viewModel.Pause();
+            });
+
+            logger.Log("Main View Initialized");
         })();
     </script>
 </body>
