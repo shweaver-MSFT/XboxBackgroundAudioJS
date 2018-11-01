@@ -12,7 +12,7 @@ namespace WebView.Interop
     [AllowForWeb]
     public sealed class WebUIApplication
     {
-        private readonly Application _app;
+        private Application _app;
         private Windows.UI.Xaml.Controls.WebView _webView;
         private IActivatedEventArgs _launchArgs;
 
@@ -48,6 +48,29 @@ namespace WebView.Interop
             _app.UnhandledException += App_UnhandledException;
         }
 
+        ~WebUIApplication()
+        {
+            _launchArgs = null;
+
+            if (_webView != null)
+            {
+                _webView.NavigationStarting -= WebView_NavigationStarting;
+                _webView.DOMContentLoaded -= WebView_DOMContentLoaded;
+                _webView.Unloaded -= WebView_Unloaded;
+                _webView = null;
+            }
+
+            if (_app != null)
+            {
+                _app.EnteredBackground -= App_EnteredBackground;
+                _app.LeavingBackground -= App_LeavingBackground;
+                _app.Resuming -= App_Resuming;
+                _app.Suspending -= App_Suspending;
+                _app.UnhandledException -= App_UnhandledException;
+                _app = null;
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -68,7 +91,7 @@ namespace WebView.Interop
                 {
                     _webView.NavigationStarting -= WebView_NavigationStarting;
                     _webView.DOMContentLoaded -= WebView_DOMContentLoaded;
-                    _webView.Unloaded += WebView_Unloaded;
+                    _webView.Unloaded -= WebView_Unloaded;
                 }
 
                 _webView = new Windows.UI.Xaml.Controls.WebView();
