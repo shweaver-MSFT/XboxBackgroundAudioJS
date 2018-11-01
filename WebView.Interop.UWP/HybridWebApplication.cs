@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 
@@ -24,7 +24,7 @@ namespace WebView.Interop.UWP
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            _webUIApplication.Launch(_source, e);
+            OnActivated(e);
         }
 
         protected override void OnActivated(IActivatedEventArgs e)

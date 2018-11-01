@@ -17,8 +17,10 @@
             <button id="pauseButton">Pause</button>
             <br />
             <br />
-            <!--<span id="appMemoryUsage">0</span>
-            <span>units</span>-->
+            <span id="appMemoryUsage">0</span>
+            <span>kb</span>
+            <br />
+            <br />
             <div id="bigImages">
                 <img src="assets/image0.jpg" />
                 <img src="assets/image1.jpg" />
@@ -86,12 +88,6 @@
                         _systemMediaTransportControls.addEventListener("buttonpressed", SystemMediaTransportControls_ButtonPressed.bind(this));
 
                         _mediaPlayer.play();
-
-                        // MemoryManager
-                        //let MemoryManager = Windows.System.MemoryManager;
-                        //MemoryManager.addEventListener("onappmemoryusageincreased", MemoryManager_AppMemoryUsageChanged.bind(this));
-                        //MemoryManager.addEventListener("onappmemoryusagedecreased", MemoryManager_AppMemoryUsageChanged.bind(this));
-                        //MemoryManager_AppMemoryUsageChanged();
                     }
                     logger.Log("Main ViewModel Initialized");
                 };
@@ -103,12 +99,6 @@
                 this.Pause = function () {
                     if (_mediaPlayer) _mediaPlayer.pause();
                 };
-
-                //function MemoryManager_AppMemoryUsageChanged() {
-                //    if (!window.Windows) return;
-                //    let MemoryManager = Windows.System.MemoryManager;
-                //    UpdateAppMemoryUsage(MemoryManager.appMemoryUsage);
-                //}
 
                 function SystemMediaTransportControls_ButtonPressed(args) {
                     if (!window.Windows) return;
@@ -131,12 +121,6 @@
             // Init View
             logger.Log("Main View Initializing...");
 
-            //var appMemoryUsage = document.querySelector("#appMemoryUsage");
-
-            //function UpdateAppMemoryUsage(memoryUsage) {
-            //    appMemoryUsage.innerHTML = memoryUsage / 1000;
-            //};
-
             // Init ViewModel
             viewModel.InitializeAsync();
 
@@ -151,6 +135,21 @@
             });
 
             logger.Log("Main View Initialized");
+
+            // MemoryManager
+            var appMemoryUsage = document.querySelector("#appMemoryUsage");
+
+            let MemoryManager = Windows.System.MemoryManager;
+            MemoryManager.addEventListener("onappmemoryusageincreased", MemoryManager_AppMemoryUsageChanged.bind(this));
+            MemoryManager.addEventListener("onappmemoryusagedecreased", MemoryManager_AppMemoryUsageChanged.bind(this));
+            MemoryManager_AppMemoryUsageChanged();
+
+            function MemoryManager_AppMemoryUsageChanged() {
+                if (!window.Windows) return;
+                appMemoryUsage.innerHTML = MemoryManager.appMemoryUsage / 1024;
+            }
+
+            setInterval(MemoryManager_AppMemoryUsageChanged, 500);
         })();
     </script>
 </body>

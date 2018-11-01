@@ -20,13 +20,10 @@ namespace XboxBackgroundAudioJS
         }
 
         // A variable to track whether you are currently running in the background.
-        bool _isInBackgroundMode = false;
+        private bool _isInBackgroundMode = false;
 
         public App() : base(_appSource)
         {
-            // Enable XY focus navigation for Xbox
-            //RequiresPointerMode = ApplicationRequiresPointerMode.WhenRequested;
-
             // Subscribe to key lifecyle events to know when the app
             // transitions to and from foreground and background.
             // Leaving the background is an important transition
@@ -79,7 +76,6 @@ namespace XboxBackgroundAudioJS
             if (Window.Current.Content == null)
             {
                 // TODO: Restore unloaded UI
-                //CreateRootFrame(ApplicationExecutionState.Running, string.Empty);
             }
         }
 
@@ -163,18 +159,18 @@ namespace XboxBackgroundAudioJS
             // in background mode and still has a view with content
             // then the view can be released to save memory and
             // can be recreated again later when leaving the background.
-            if (_isInBackgroundMode && Window.Current.Content != null)
-            {
-                // Some apps may wish to use this helper to explicitly disconnect
-                // child references.
-                // VisualTreeHelper.DisconnectChildrenRecursive(Window.Current.Content);
+            //if (_isInBackgroundMode && Window.Current.Content != null)
+            //{
+            //    // Some apps may wish to use this helper to explicitly disconnect
+            //    // child references.
+            //    Windows.UI.Xaml.Media.VisualTreeHelper.DisconnectChildrenRecursive(Window.Current.Content);
 
-                // Clear the view content. Note that views should rely on
-                // events like Page.Unloaded to further release resources.
-                // Release event handlers in views since references can
-                // prevent objects from being collected.
-                Window.Current.Content = null;
-            }
+            //    // Clear the view content. Note that views should rely on
+            //    // events like Page.Unloaded to further release resources.
+            //    // Release event handlers in views since references can
+            //    // prevent objects from being collected.
+            //    Window.Current.Content = null;
+            //}
 
             // Run the GC to collect released resources.
             GC.Collect();
