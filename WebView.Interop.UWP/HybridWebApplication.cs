@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 
@@ -9,6 +9,7 @@ namespace WebView.Interop.UWP
         private readonly Uri _source;
         private readonly Uri _contactPanelSource;
         private readonly WebUIApplication _webUIApplication;
+        private IActivatedEventArgs _activationArgs;
 
         public HybridWebApplication(Uri source, Uri contactPanelSource = null)
         {
@@ -33,8 +34,12 @@ namespace WebView.Interop.UWP
             if (e.Kind == ActivationKind.ContactPanel && _contactPanelSource != null)
             {
                 _webUIApplication.Launch(_contactPanelSource, new ContactPanelActivatedEventArgs(e as Windows.ApplicationModel.Activation.ContactPanelActivatedEventArgs));
+                return;
             }
-            else if (e.PreviousExecutionState != ApplicationExecutionState.Running || e.PreviousExecutionState != ApplicationExecutionState.Suspended)
+
+            _activationArgs = e;
+
+            if (e.PreviousExecutionState != ApplicationExecutionState.Running || e.PreviousExecutionState != ApplicationExecutionState.Suspended)
             {
                 _webUIApplication.Launch(_source, e);
             }
@@ -42,6 +47,11 @@ namespace WebView.Interop.UWP
             {
                 _webUIApplication.Activate(e);
             }
+        }
+
+        protected void Reactivate()
+        {
+            _webUIApplication.Activate(_activationArgs);
         }
 
         protected override void OnBackgroundActivated(Windows.ApplicationModel.Activation.BackgroundActivatedEventArgs args)

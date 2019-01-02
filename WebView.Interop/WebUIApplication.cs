@@ -81,7 +81,10 @@ namespace WebView.Interop
         [DefaultOverload]
         public void Launch(Uri source, IActivatedEventArgs e)
         {
-            _launchArgs = e;
+            if (e != null)
+            {
+                _launchArgs = e;
+            }
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
