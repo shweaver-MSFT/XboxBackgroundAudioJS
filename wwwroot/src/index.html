@@ -61,8 +61,8 @@
             /* Main ViewModel */
             var viewModel = new function () {
 
-                var _mediaPlayer = null;
-                var _systemMediaTransportControls = null;
+                //var _mediaPlayer = null;
+                //var _systemMediaTransportControls = null;
 
                 /**
                  * Initialize the ViewModel.
@@ -71,21 +71,22 @@
                     logger.Log("Main ViewModel Initializing...");
 
                     if (window.Windows) {
+
                         // MediaPlayer
                         let Uri = Windows.Foundation.Uri;
                         let MediaSource = Windows.Media.Core.MediaSource;
-                        let MediaPlayer = Windows.Media.Playback.MediaPlayer;
+                        //let MediaPlayer = Windows.Media.Playback.MediaPlayer;
                         let source = MediaSource.createFromUri(new Uri("ms-appx:///assets/Ring01.wma"));
 
-                        _mediaPlayer = new MediaPlayer();
+                        _mediaPlayer = mediaPlayer.player;
                         _mediaPlayer.source = source;
                         _mediaPlayer.autoPlay = true;
                         _mediaPlayer.isLoopingEnabled = true;
 
-                        _systemMediaTransportControls = _mediaPlayer.systemMediaTransportControls;
-                        _systemMediaTransportControls.isPlayEnabled = true;
-                        _systemMediaTransportControls.isPauseEnabled = true;
-                        _systemMediaTransportControls.addEventListener("buttonpressed", SystemMediaTransportControls_ButtonPressed.bind(this));
+                        //_systemMediaTransportControls = _mediaPlayer.systemMediaTransportControls;
+                        //_systemMediaTransportControls.isPlayEnabled = true;
+                        //_systemMediaTransportControls.isPauseEnabled = true;
+                        //_systemMediaTransportControls.addEventListener("buttonpressed", SystemMediaTransportControls_ButtonPressed.bind(this));
 
                         _mediaPlayer.play();
                     }
@@ -100,21 +101,21 @@
                     if (_mediaPlayer) _mediaPlayer.pause();
                 };
 
-                function SystemMediaTransportControls_ButtonPressed(args) {
-                    if (!window.Windows) return;
+                //function SystemMediaTransportControls_ButtonPressed(args) {
+                //    if (!window.Windows) return;
 
-                    let SystemMediaTransportControlsButton = Windows.Media.SystemMediaTransportControlsButton;
-                    var button = args.detail[0].button;
+                //    let SystemMediaTransportControlsButton = Windows.Media.SystemMediaTransportControlsButton;
+                //    var button = args.detail[0].button;
 
-                    switch (button) {
-                        case SystemMediaTransportControlsButton.play:
-                            this.Play();
-                            break;
-                        case SystemMediaTransportControlsButton.pause:
-                            this.Pause();
-                            break;
-                    }
-                }
+                //    switch (button) {
+                //        case SystemMediaTransportControlsButton.play:
+                //            this.Play();
+                //            break;
+                //        case SystemMediaTransportControlsButton.pause:
+                //            this.Pause();
+                //            break;
+                //    }
+                //}
             };
 
             /* Main View */
