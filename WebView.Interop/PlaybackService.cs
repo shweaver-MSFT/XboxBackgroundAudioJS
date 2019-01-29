@@ -81,6 +81,16 @@ namespace WebView.Interop
         {
             (this.Player.Source as MediaPlaybackList).MoveTo(index);
         }
+        public bool AutoPlay
+        {
+            set { this.Player.AutoPlay = value; }
+            get { return this.Player.AutoPlay; }
+        }
+        public bool IsLoopingEnabled
+        {
+            set { this.Player.IsLoopingEnabled = value; }
+            get { return this.Player.IsLoopingEnabled; }
+        }
         public double Volume
         {
             get { return this.Player.Volume; }
