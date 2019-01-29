@@ -12,7 +12,7 @@ namespace WebView.Interop
     public sealed class WebUIApplication
     {
         private Application _app;
-        private IActivatedEventArgs _launchArgs;
+        public IActivatedEventArgs LaunchArgs { get; private set; }
 
         // Occurs when the app is activated.
         public event EventHandler<Object> Activated;
@@ -48,7 +48,7 @@ namespace WebView.Interop
 
         ~WebUIApplication()
         {
-            _launchArgs = null;
+            LaunchArgs = null;
 
             if (Window.Current.Content != null)
             {
@@ -68,7 +68,7 @@ namespace WebView.Interop
 
         private WebViewPage CreateWebViewPage(Uri sourceUri)
         {
-            var webViewPage = new WebViewPage(this);
+            var webViewPage = new WebViewPage(this, sourceUri);
             return webViewPage;
         }
 
@@ -84,7 +84,7 @@ namespace WebView.Interop
         {
             if (e != null)
             {
-                _launchArgs = e;
+                LaunchArgs = e;
             }
 
             // Do not repeat app initialization when the Window already has content,
@@ -125,7 +125,7 @@ namespace WebView.Interop
 
         public void BackgroundActivate(Windows.ApplicationModel.Activation.BackgroundActivatedEventArgs e)
         {
-            EventDispatcher.Dispatch(() => Activated?.Invoke(this, new BackgroundActivatedEventArgs(_launchArgs, e)));
+            EventDispatcher.Dispatch(() => Activated?.Invoke(this, new BackgroundActivatedEventArgs(LaunchArgs, e)));
         }
 
         public void CachedFileUpdaterActivate(CachedFileUpdaterActivatedEventArgs e)
