@@ -11,12 +11,22 @@ namespace WebView.Interop
 {
     internal class WebViewPage : Page
     {
-        public WebViewPage(Uri uri)
+        public WebViewPage(WebUIApplication webApp)
         {
             //InitializeComponent();
 
             Loaded += OnLoaded;
         }
+
+        //private void WebView_NavigationStarting(Windows.UI.Xaml.Controls.WebView sender, WebViewNavigationStartingEventArgs e)
+        //{
+        //    sender.AddWebAllowedObject(GetType().Name, this);
+        //}
+
+        //private void WebView_DOMContentLoaded(Windows.UI.Xaml.Controls.WebView sender, WebViewDOMContentLoadedEventArgs args)
+        //{
+        //    Activate(_launchArgs);
+        //}
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {

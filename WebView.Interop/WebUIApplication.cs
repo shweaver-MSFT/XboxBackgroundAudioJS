@@ -66,6 +66,12 @@ namespace WebView.Interop
             }
         }
 
+        private WebViewPage CreateWebViewPage(Uri sourceUri)
+        {
+            var webViewPage = new WebViewPage(this);
+            return webViewPage;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -85,7 +91,7 @@ namespace WebView.Interop
             // just ensure that the window is active
             if (!(Window.Current.Content is WebViewPage))
             {
-                Window.Current.Content = new WebViewPage(source);
+                Window.Current.Content = CreateWebViewPage(source);
             }
 
             //_webView.Navigate(source);
@@ -105,7 +111,7 @@ namespace WebView.Interop
         /// <param name="e"></param>
         public void Launch(Uri source, ContactPanelActivatedEventArgs e)
         {
-            Window.Current.Content = new WebViewPage(source);
+            Window.Current.Content = CreateWebViewPage(source);
 
             // Ensure the current window is active
             Window.Current.Activate();
@@ -243,29 +249,5 @@ namespace WebView.Interop
             e.Handled = true;
         }
         #endregion Application event handlers
-
-        #region WebView event handlers
-        //private void WebView_NavigationStarting(Windows.UI.Xaml.Controls.WebView sender, WebViewNavigationStartingEventArgs e)
-        //{
-        //    sender.AddWebAllowedObject(GetType().Name, this);
-        //}
-
-        //private void WebView_DOMContentLoaded(Windows.UI.Xaml.Controls.WebView sender, WebViewDOMContentLoadedEventArgs args)
-        //{
-        //    Activate(_launchArgs);
-        //}
-
-        //private void WebView_Unloaded(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is Windows.UI.Xaml.Controls.WebView webView && webView != null)
-        //    {
-        //        webView.NavigationStarting -= WebView_NavigationStarting;
-        //        webView.DOMContentLoaded -= WebView_DOMContentLoaded;
-        //        webView.Unloaded -= WebView_Unloaded;
-        //    }
-
-        //    GC.Collect();
-        //}
-        #endregion WebView event handlers
     }
 }
