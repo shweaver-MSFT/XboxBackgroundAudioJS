@@ -5,7 +5,6 @@ using Windows.Foundation;
 using Windows.Foundation.Metadata;
 using Windows.System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace WebView.Interop
 {
@@ -13,7 +12,6 @@ namespace WebView.Interop
     public sealed class WebUIApplication
     {
         private Application _app;
-        private Windows.UI.Xaml.Controls.WebView _webView;
         private IActivatedEventArgs _launchArgs;
 
         // Occurs when the app is activated.
@@ -52,12 +50,10 @@ namespace WebView.Interop
         {
             _launchArgs = null;
 
-            if (_webView != null)
+            if (Window.Current.Content is WebViewPage webViewPage)
             {
-                _webView.NavigationStarting -= WebView_NavigationStarting;
-                _webView.DOMContentLoaded -= WebView_DOMContentLoaded;
-                _webView.Unloaded -= WebView_Unloaded;
-                _webView = null;
+                webViewPage.Unload();
+                webViewPage = null;
             }
 
             if (_app != null)
@@ -88,24 +84,12 @@ namespace WebView.Interop
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
-            if (!(Window.Current.Content is Windows.UI.Xaml.Controls.WebView))
+            if (!(Window.Current.Content is WebViewPage))
             {
-                if (_webView != null)
-                {
-                    _webView.NavigationStarting -= WebView_NavigationStarting;
-                    _webView.DOMContentLoaded -= WebView_DOMContentLoaded;
-                    _webView.Unloaded -= WebView_Unloaded;
-                }
-
-                _webView = new Windows.UI.Xaml.Controls.WebView();
-                _webView.NavigationStarting += WebView_NavigationStarting;
-                _webView.DOMContentLoaded += WebView_DOMContentLoaded;
-                _webView.Unloaded += WebView_Unloaded;
-
-                Window.Current.Content = _webView;
+                Window.Current.Content = new WebViewPage(source);
             }
 
-            _webView.Navigate(source);
+            //_webView.Navigate(source);
 
             if (!(e is IPrelaunchActivatedEventArgs) ||
                 e is IPrelaunchActivatedEventArgs && (e as IPrelaunchActivatedEventArgs).PrelaunchActivated == false)
@@ -122,13 +106,7 @@ namespace WebView.Interop
         /// <param name="e"></param>
         public void Launch(Uri source, ContactPanelActivatedEventArgs e)
         {
-            var webView = new Windows.UI.Xaml.Controls.WebView();
-            _webView.NavigationStarting += WebView_NavigationStarting;
-            _webView.DOMContentLoaded += WebView_DOMContentLoaded;
-            _webView.Unloaded += WebView_Unloaded;
-
-            Window.Current.Content = webView;
-            webView.Navigate(source);
+            Window.Current.Content = new WebViewPage(source);
 
             // Ensure the current window is active
             Window.Current.Activate();
@@ -178,6 +156,22 @@ namespace WebView.Interop
         public void OnWindowCreated(WindowCreatedEventArgs e)
         {
             EventDispatcher.Dispatch(() => WindowCreated?.Invoke(this, e));
+        }
+
+        public void OnEnteredBackground(Windows.ApplicationModel.EnteredBackgroundEventArgs args)
+        {
+            if (Window.Current.Content is WebViewPage webViewPage)
+            {
+                webViewPage.Unload();
+            }
+        }
+
+        public void OnLeavingBackground(Windows.ApplicationModel.LeavingBackgroundEventArgs args)
+        {
+            if (Window.Current.Content is WebViewPage webViewPage)
+            {
+                webViewPage.Load();
+            }
         }
 
         /// <summary>
@@ -244,34 +238,35 @@ namespace WebView.Interop
             var number = "SCRIPT" + int.Parse(Convert.ToString(lowBits), System.Globalization.NumberStyles.HexNumber);
             var description = e.Message;
 
-            await _webView.InvokeScriptAsync("eval", new string[] { $"throw new Error('{number}', '{description}')" });
+            // TODO: Fix error bubbling
+            //await _webView.InvokeScriptAsync("eval", new string[] { $"throw new Error('{number}', '{description}')" });
 
             e.Handled = true;
         }
         #endregion Application event handlers
 
         #region WebView event handlers
-        private void WebView_NavigationStarting(Windows.UI.Xaml.Controls.WebView sender, WebViewNavigationStartingEventArgs e)
-        {
-            sender.AddWebAllowedObject(GetType().Name, this);
-        }
+        //private void WebView_NavigationStarting(Windows.UI.Xaml.Controls.WebView sender, WebViewNavigationStartingEventArgs e)
+        //{
+        //    sender.AddWebAllowedObject(GetType().Name, this);
+        //}
 
-        private void WebView_DOMContentLoaded(Windows.UI.Xaml.Controls.WebView sender, WebViewDOMContentLoadedEventArgs args)
-        {
-            Activate(_launchArgs);
-        }
+        //private void WebView_DOMContentLoaded(Windows.UI.Xaml.Controls.WebView sender, WebViewDOMContentLoadedEventArgs args)
+        //{
+        //    Activate(_launchArgs);
+        //}
 
-        private void WebView_Unloaded(object sender, RoutedEventArgs e)
-        {
-            if (sender is Windows.UI.Xaml.Controls.WebView webView && webView != null)
-            {
-                webView.NavigationStarting -= WebView_NavigationStarting;
-                webView.DOMContentLoaded -= WebView_DOMContentLoaded;
-                webView.Unloaded -= WebView_Unloaded;
-            }
+        //private void WebView_Unloaded(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is Windows.UI.Xaml.Controls.WebView webView && webView != null)
+        //    {
+        //        webView.NavigationStarting -= WebView_NavigationStarting;
+        //        webView.DOMContentLoaded -= WebView_DOMContentLoaded;
+        //        webView.Unloaded -= WebView_Unloaded;
+        //    }
 
-            GC.Collect();
-        }
+        //    GC.Collect();
+        //}
         #endregion WebView event handlers
     }
 }

@@ -16,6 +16,19 @@ namespace WebView.Interop.UWP
             _source = source;
             _contactPanelSource = contactPanelSource;
             _webUIApplication = new WebUIApplication(this);
+
+            EnteredBackground += HybridWebApplication_EnteredBackground;
+            LeavingBackground += HybridWebApplication_LeavingBackground;
+        }
+
+        private void HybridWebApplication_EnteredBackground(object sender, Windows.ApplicationModel.EnteredBackgroundEventArgs e)
+        {
+            _webUIApplication.OnEnteredBackground(e);
+        }
+
+        private void HybridWebApplication_LeavingBackground(object sender, Windows.ApplicationModel.LeavingBackgroundEventArgs e)
+        {
+            _webUIApplication.OnLeavingBackground(e);
         }
 
         /// <summary>
