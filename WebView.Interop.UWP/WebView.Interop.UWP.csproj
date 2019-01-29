@@ -107,7 +107,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="HybridWebApplication.cs" />
-    <Compile Include="PlaybackService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\WebView.Interop.UWP.rd.xml" />
   </ItemGroup>

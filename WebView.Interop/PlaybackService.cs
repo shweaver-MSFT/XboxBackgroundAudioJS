@@ -8,7 +8,7 @@ using Windows.Foundation.Metadata;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 
-namespace WebView.Interop.UWP
+namespace WebView.Interop
 {
     public delegate void CurrentStateChangedDelegate(object source, object e);
 

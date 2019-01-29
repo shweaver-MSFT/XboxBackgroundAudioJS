@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace WebView.Interop
 {
-    public class WebViewPage : Page
+    internal class WebViewPage : Page
     {
         public WebViewPage(Uri uri)
         {
@@ -49,10 +49,10 @@ namespace WebView.Interop
         {
             var wv = new Windows.UI.Xaml.Controls.WebView(WebViewExecutionMode.SeparateProcess);
             wv.Settings.IsJavaScriptEnabled = true;
-            wv.AddWebAllowedObject("mediaPlayer", WebView.Interop.UWP.PlaybackService.Instance);
+            wv.AddWebAllowedObject("mediaPlayer", PlaybackService.Instance);
             WireUpWebViewDiagnostics(wv);
             Grid.SetRow(wv, 0);
-            this.Grid.Children.Add(wv);
+            //this.Grid.Children.Add(wv);
             return wv;
         }
 

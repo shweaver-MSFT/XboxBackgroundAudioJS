@@ -50,10 +50,9 @@ namespace WebView.Interop
         {
             _launchArgs = null;
 
-            if (Window.Current.Content is WebViewPage webViewPage)
+            if (Window.Current.Content != null)
             {
-                webViewPage.Unload();
-                webViewPage = null;
+                Window.Current.Content = null;
             }
 
             if (_app != null)
