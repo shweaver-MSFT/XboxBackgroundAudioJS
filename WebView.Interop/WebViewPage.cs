@@ -31,7 +31,7 @@ namespace WebView.Interop
                 _webView = CreateWebView();
                 _webView.Source = _sourceUri;
                 _webView.AddWebAllowedObject(_webApp.GetType().Name, _webApp);
-                _webView.DOMContentLoaded += (s, e) => _webApp.Activate(_webApp.LaunchArgs);
+                //_webView.DOMContentLoaded += (s, e) => _webApp.Activate(_webApp.LaunchArgs);
 
                 Content = _webView;
             }
@@ -92,14 +92,5 @@ namespace WebView.Interop
         {
             Debug.WriteLine(args.Uri?.ToString());
         }
-
-        //private void ButtonUnload_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Unload();
-        //}
-        //private void ButtonLoad_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Load();
-        //}
     }
 }

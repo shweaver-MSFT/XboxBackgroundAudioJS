@@ -11,6 +11,7 @@ namespace WebView.Interop
     [AllowForWeb]
     public sealed class WebUIApplication
     {
+        private bool _isInBackground = false;
         private Application _app;
         public IActivatedEventArgs LaunchArgs { get; private set; }
 
@@ -165,6 +166,8 @@ namespace WebView.Interop
 
         public void OnEnteredBackground(Windows.ApplicationModel.EnteredBackgroundEventArgs args)
         {
+            _isInBackground = true;
+
             if (Window.Current.Content is WebViewPage webViewPage)
             {
                 webViewPage.Unload();
@@ -173,10 +176,12 @@ namespace WebView.Interop
 
         public void OnLeavingBackground(Windows.ApplicationModel.LeavingBackgroundEventArgs args)
         {
-            if (Window.Current.Content is WebViewPage webViewPage)
+            if (_isInBackground && Window.Current.Content is WebViewPage webViewPage)
             {
                 webViewPage.Load();
             }
+
+            _isInBackground = false;
         }
 
         /// <summary>
