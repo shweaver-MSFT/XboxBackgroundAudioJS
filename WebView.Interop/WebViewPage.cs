@@ -34,7 +34,7 @@ namespace WebView.Interop
                 _webView = CreateWebView();
                 _webView.AddWebAllowedObject(_webApp.GetType().Name, _webApp);
                 _webView.Source = _sourceUri;
-                _webView.DOMContentLoaded += (s, e) => _webApp.Activate(_activationArgs);
+                //_webView.DOMContentLoaded += (s, e) => _webApp.Activate(_activationArgs);
 
                 Content = _webView;
             }

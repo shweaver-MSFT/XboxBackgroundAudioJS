@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using Windows.Foundation.Diagnostics;
 using Windows.Storage;
 using Windows.System;
 using Windows.UI.Xaml;
@@ -35,7 +34,6 @@ namespace WebView.Interop.UWP
 
             if (_logToFile)
             {
-                // AppData\Local\Packages\a6e3c334-0e9e-4314-93db-3a2d4066d3ac_80c4904e66sn0\LocalState
                 _logFile = await ApplicationData.Current.LocalFolder.CreateFileAsync($"[{DateTime.Now.ToString("hhmmss")}]{_fileName}");
                 _fileStream = await _logFile.OpenStreamForWriteAsync();
             }
