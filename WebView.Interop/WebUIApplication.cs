@@ -24,9 +24,6 @@ namespace WebView.Interop
         // Occurs when the app is about to leave the background and before the app's UI is shown.
         public event EventHandler<Object> LeavingBackground;
 
-        // Occurs when the app is navigating.
-        public event EventHandler<Object> Navigated;
-
         // Occurs when the app is resuming.
         public event EventHandler<Object> Resuming;
 
@@ -67,9 +64,9 @@ namespace WebView.Interop
             }
         }
 
-        private WebViewPage CreateWebViewPage(Uri sourceUri)
+        private WebViewPage CreateWebViewPage(Uri sourceUri, IActivatedEventArgs args)
         {
-            var webViewPage = new WebViewPage(this, sourceUri);
+            var webViewPage = new WebViewPage(this, sourceUri, args);
             return webViewPage;
         }
 
@@ -92,10 +89,8 @@ namespace WebView.Interop
             // just ensure that the window is active
             if (!(Window.Current.Content is WebViewPage))
             {
-                Window.Current.Content = CreateWebViewPage(source);
+                Window.Current.Content = CreateWebViewPage(source, LaunchArgs);
             }
-
-            //_webView.Navigate(source);
 
             if (!(e is IPrelaunchActivatedEventArgs) ||
                 e is IPrelaunchActivatedEventArgs && (e as IPrelaunchActivatedEventArgs).PrelaunchActivated == false)
@@ -112,7 +107,7 @@ namespace WebView.Interop
         /// <param name="e"></param>
         public void Launch(Uri source, ContactPanelActivatedEventArgs e)
         {
-            Window.Current.Content = CreateWebViewPage(source);
+            Window.Current.Content = CreateWebViewPage(source, e);
 
             // Ensure the current window is active
             Window.Current.Activate();

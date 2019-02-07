@@ -8,7 +8,7 @@ namespace XboxBackgroundAudioJS
 {
     sealed partial class App : HybridWebApplication
     {
-        // Make sure to grant WebView access to these in the appxmanifest.
+        // If building with web code local to the package, make sure to grant WebView access in the appxmanifest.
         // <uap:ApplicationContentUriRules>
         //   <uap:Rule Match="ms-appx-web:///index.html" Type="include" WindowsRuntimeAccess="all" />
         // </uap:ApplicationContentUriRules>
@@ -159,18 +159,18 @@ namespace XboxBackgroundAudioJS
             // in background mode and still has a view with content
             // then the view can be released to save memory and
             // can be recreated again later when leaving the background.
-            //if (_isInBackgroundMode && Window.Current.Content != null)
-            //{
-            //    // Some apps may wish to use this helper to explicitly disconnect
-            //    // child references.
-            //    Windows.UI.Xaml.Media.VisualTreeHelper.DisconnectChildrenRecursive(Window.Current.Content);
+            if (_isInBackgroundMode && Window.Current.Content != null)
+            {
+                // Some apps may wish to use this helper to explicitly disconnect
+                // child references.
+                Windows.UI.Xaml.Media.VisualTreeHelper.DisconnectChildrenRecursive(Window.Current.Content);
 
-            //    // Clear the view content. Note that views should rely on
-            //    // events like Page.Unloaded to further release resources.
-            //    // Release event handlers in views since references can
-            //    // prevent objects from being collected.
-            //    Window.Current.Content = null;
-            //}
+                // Clear the view content. Note that views should rely on
+                // events like Page.Unloaded to further release resources.
+                // Release event handlers in views since references can
+                // prevent objects from being collected.
+                Window.Current.Content = null;
+            }
 
             // Run the GC to collect released resources.
             GC.Collect();

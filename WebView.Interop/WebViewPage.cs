@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -7,14 +8,16 @@ namespace WebView.Interop
 {
     internal class WebViewPage : Page
     {
-        private Uri _sourceUri = null;
+        private readonly Uri _sourceUri = null;
+        private readonly IActivatedEventArgs _activationArgs = null;
         private Windows.UI.Xaml.Controls.WebView _webView = null;
         private WebUIApplication _webApp = null;
 
-        public WebViewPage(WebUIApplication webApp, Uri sourceUri)
+        public WebViewPage(WebUIApplication webApp, Uri sourceUri, IActivatedEventArgs activationArgs)
         {
             _webApp = webApp;
             _sourceUri = sourceUri;
+            _activationArgs = activationArgs;
 
             Loaded += OnLoaded;
         }
@@ -29,9 +32,9 @@ namespace WebView.Interop
             if (_webView == null)
             {
                 _webView = CreateWebView();
-                _webView.Source = _sourceUri;
                 _webView.AddWebAllowedObject(_webApp.GetType().Name, _webApp);
-                //_webView.DOMContentLoaded += (s, e) => _webApp.Activate(_webApp.LaunchArgs);
+                _webView.Source = _sourceUri;
+                _webView.DOMContentLoaded += (s, e) => _webApp.Activate(_activationArgs);
 
                 Content = _webView;
             }
@@ -50,7 +53,7 @@ namespace WebView.Interop
             GC.Collect();
         }
 
-        private static Windows.UI.Xaml.Controls.WebView CreateWebView()
+        private Windows.UI.Xaml.Controls.WebView CreateWebView()
         {
             var wv = new Windows.UI.Xaml.Controls.WebView(WebViewExecutionMode.SeparateProcess);
             wv.Settings.IsJavaScriptEnabled = true;
@@ -59,21 +62,21 @@ namespace WebView.Interop
             return wv;
         }
 
-        private static void WireUpWebViewDiagnostics(Windows.UI.Xaml.Controls.WebView webView)
+        private void WireUpWebViewDiagnostics(Windows.UI.Xaml.Controls.WebView webView)
         {
             webView.NavigationStarting += OnWebViewNavigationStarting;
             webView.SeparateProcessLost += OnWebViewSeparateProcessLost;
             webView.ScriptNotify += OnWebViewScriptNotify;
         }
 
-        private static void UnwireWebViewDiagnostics(Windows.UI.Xaml.Controls.WebView webView)
+        private void UnwireWebViewDiagnostics(Windows.UI.Xaml.Controls.WebView webView)
         {
             webView.NavigationStarting -= OnWebViewNavigationStarting;
             webView.SeparateProcessLost -= OnWebViewSeparateProcessLost;
             webView.ScriptNotify -= OnWebViewScriptNotify;
         }
 
-        private static async void OnWebViewScriptNotify(object sender, NotifyEventArgs e)
+        private async void OnWebViewScriptNotify(object sender, NotifyEventArgs e)
         {
             if (sender is Windows.UI.Xaml.Controls.WebView wv)
             {
@@ -83,12 +86,12 @@ namespace WebView.Interop
             }
         }
 
-        private static void OnWebViewSeparateProcessLost(Windows.UI.Xaml.Controls.WebView sender, WebViewSeparateProcessLostEventArgs args)
+        private void OnWebViewSeparateProcessLost(Windows.UI.Xaml.Controls.WebView sender, WebViewSeparateProcessLostEventArgs args)
         {
             UnwireWebViewDiagnostics(sender);
         }
 
-        private static void OnWebViewNavigationStarting(Windows.UI.Xaml.Controls.WebView sender, WebViewNavigationStartingEventArgs args)
+        private void OnWebViewNavigationStarting(Windows.UI.Xaml.Controls.WebView sender, WebViewNavigationStartingEventArgs args)
         {
             Debug.WriteLine(args.Uri?.ToString());
         }
